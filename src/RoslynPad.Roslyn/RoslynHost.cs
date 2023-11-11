@@ -308,6 +308,8 @@ public class RoslynHost : IRoslynHost
             loader: new FileTextLoader(file, defaultEncoding: null),
             filePath: file));
 
+        var hostObjectType = GetProjectHostObjectType();
+
         solution = solution.AddProject(ProjectInfo.Create(
             id,
             VersionStamp.Create(),
@@ -317,6 +319,7 @@ public class RoslynHost : IRoslynHost
             filePath: path,
             isSubmission: isScript,
             parseOptions: parseOptions,
+            hostObjectType: hostObjectType,
             compilationOptions: compilationOptions,
             metadataReferences: previousProject != null ? ImmutableArray<MetadataReference>.Empty : DefaultReferences,
             projectReferences: previousProject != null ? new[] { new ProjectReference(previousProject.Id) } : null)
@@ -341,4 +344,7 @@ public class RoslynHost : IRoslynHost
             return string.Empty;
         }
     }
+
+    protected virtual Type? GetProjectHostObjectType() => null;
+
 }
